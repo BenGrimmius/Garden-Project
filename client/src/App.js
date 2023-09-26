@@ -1,29 +1,31 @@
-import { useEffect, useState } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import './App-styles.css';
+import './App-layout.css';
+import { useState } from 'react';
+import SignInForm from './SignInForm';
+import RegisterForm from './RegisterForm';
+import MyGardenScreen from './MyGardenScreen';
 
 function App() {
-  const [serverData, setServerData] = useState('');
+  const [page, setPage] = useState('sign-in');
 
-  useEffect(() => {
-    async function readServerData() {
-      const resp = await fetch('/api/hello');
-      const data = await resp.json();
-
-      console.log('Data from server:', data);
-
-      setServerData(data.message);
+  function handleNavigate(page) {
+    setPage(page);
+    if (page === 'sign-out') {
+      sessionStorage.removeItem('token');
+      setPage('sign-in');
     }
-
-    readServerData();
-  }, []);
+  }
 
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <h1>{serverData}</h1>
-      </header>
+      {page === 'sign-in' && (
+        <SignInForm
+          onNavigate={handleNavigate}
+          onSignIn={() => handleNavigate('my-garden')}
+        />
+      )}
+      {page === 'register' && <RegisterForm onNavigate={handleNavigate} />}
+      {page === 'my-garden' && <MyGardenScreen onNavigate={handleNavigate} />}
     </div>
   );
 }

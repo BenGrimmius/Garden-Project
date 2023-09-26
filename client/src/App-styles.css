@@ -1,0 +1,85 @@
+* {
+  font-family: ABeeZee, Arial, Helvetica, sans-serif;
+}
+
+.App {
+  text-align: center;
+  height: 100vh;
+  width: 100vw;
+}
+
+.container {
+  max-width: 600px;
+  height: 100vh;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.form-wallpaper {
+  height: 100vh;
+  width: 100vw;
+  background-image: url('../public/log-in-background.jpeg');
+  background-size: cover;
+  position: fixed;
+  z-index: -1;
+}
+
+.logout-button {
+  background: none;
+  border: none;
+  font-size: 20px;
+  text-decoration: none;
+  color: rgb(212, 60, 60);
+  display: block;
+  margin-top: 2rem;
+  font-weight: bold;
+  text-shadow: 1px 1px 1px black;
+  cursor: pointer;
+  align-self: flex-start;
+}
+
+.main-wallpaper {
+  height: 100vh;
+  width: 100vw;
+  background-image: url('../public/Garden-bg.jpeg');
+  background-size: cover;
+  position: fixed;
+  z-index: -1;
+}
+
+.nav-to-register-button {
+  background: none;
+  border: none;
+  margin-top: 1rem;
+  font-size: 20px;
+  cursor: pointer;
+  text-decoration: underline;
+  color: blue;
+  display: block;
+}
+
+.register-modal {
+  width: 300px;
+  height: 450px;
+  background-color: rgb(173, 173, 173);
+  border: 1px grey solid;
+  border-radius: 0.7rem;
+  opacity: 0.8;
+  padding: 5px;
+}
+
+.sign-in-modal {
+  width: 300px;
+  height: 400px;
+  background-color: rgb(173, 173, 173);
+  border: 1px grey solid;
+  border-radius: 0.7rem;
+  opacity: 0.8;
+  padding: 5px;
+}
+
+.react-attributes-test {
+  color: rgb(112, 188, 112);
+}
