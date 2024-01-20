@@ -18,11 +18,9 @@ CREATE TABLE "public"."users"(
 CREATE TABLE "public"."plants"(
   "plantId" serial,
   "plantName" text NOT NULL,
-  "species" text NOT NULL,
-  "description" text NOT NULL,
-  "wateringTip" text NOT NULL,
+  "cycle" text NOT NULL,
+  "watering" text NOT NULL,
   "photoUrl" varchar NOT NULL,
-  "edible" boolean,
   "sunlight" text NOT NULL,
   "createdAt" timestamptz(6) NOT NULL DEFAULT now(),
   "updatedAt" timestamptz(6) NOT NULL DEFAULT now(),
