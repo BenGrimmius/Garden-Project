@@ -2,19 +2,25 @@
   font-family: ABeeZee, Arial, Helvetica, sans-serif;
 }
 
+ul {
+  list-style-type: none;
+}
+
+li {
+  padding: auto;
+  margin: auto;
+}
+
 .App {
   text-align: center;
   height: 100vh;
   width: 100vw;
 }
 
-.container {
-  max-width: 600px;
-  height: 100vh;
-  margin: 0 auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.browse-list-container {
+  width: 350px;
+  overflow: auto;
+  max-height: 750px;
 }
 
 .form-wallpaper {
@@ -58,6 +64,23 @@
   text-decoration: underline;
   color: blue;
   display: block;
+}
+
+.plant-img {
+  width: 130px;
+  height: 130px;
+  margin: 10px;
+  object-fit: cover;
+  border-radius: 0.5rem;
+  box-shadow: 0 0 5px black;
+}
+
+.plant-wrapper {
+  border: 1px solid black;
+  margin: 10px;
+  box-shadow: 0 0 5px black;
+  border-radius: 0.5rem;
+  background-color: rgb(255, 254, 254, 0.7);
 }
 
 .register-modal {

@@ -23,8 +23,7 @@ export default function SignInForm({ onNavigate, onSignIn }) {
 
   return (
     <>
-      <div className="form-wallpaper" />
-      <div className="container">
+      <div className="form-container">
         <div className="sign-in-modal">
           <h1 style={{ fontSize: '40px' }}>Login</h1>
           <form className="sign-in-form" onSubmit={handleSubmit}>
