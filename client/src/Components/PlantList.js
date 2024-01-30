@@ -64,7 +64,7 @@ export default function PlantList() {
 
   const plantArray = [
     {
-      plantDd: 1,
+      id: 1,
       plantName: 'Super spicy thing',
       plantCycle: 'Perenual',
       plantwatering: 'average',
@@ -83,7 +83,7 @@ export default function PlantList() {
     },
     {
       id: 3,
-      plantName: 'That one thing',
+      plantName: 'Superlous thing',
       plantCycle: 'Perenual',
       plantwatering: 'average',
       plantSunlight: ['full sun'],
@@ -97,8 +97,15 @@ export default function PlantList() {
       {plantArray.map((plant) => (
         <div className="plant-wrapper" key={plant.id}>
           <div className="row">
-            <div className="as-flex-start col-40">
-              <h2 style={{ margin: '10px', fontSize: '30px' }}>
+            <div className="col-40">
+              <h2
+                style={{
+                  margin: '5px',
+                  fontSize: '25px',
+                  overflowWrap: 'break-word',
+                  display: 'flex',
+                  justifyContent: 'center',
+                }}>
                 {plant.plantName}
               </h2>
             </div>
@@ -109,7 +116,13 @@ export default function PlantList() {
                 className="plant-img"
               />
             </div>
-            <div className="col-20">
+            <div
+              className="col-20"
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+              }}>
               <div style={{ margin: '10px' }}>{addButton}</div>
               <div>{iButton}</div>
             </div>
