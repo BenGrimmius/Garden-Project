@@ -1,7 +1,6 @@
-import peppers from '../images/peppers.jpeg';
+// import peppers from '../images/peppers.jpeg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
-import { faCircleInfo } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 
 export default function PlantList() {
   const addButton = (
@@ -70,7 +69,7 @@ export default function PlantList() {
       plantwatering: 'average',
       plantSunlight: ['full sun', 'partial sun'],
       plantOtherName: ['that thing', 'spicy guy'],
-      plantImage: peppers,
+      // plantImage: peppers,
     },
     {
       id: 2,
@@ -79,7 +78,7 @@ export default function PlantList() {
       plantwatering: 'average',
       plantSunlight: ['full sun'],
       plantOtherName: ['that thing', 'where is it'],
-      plantImage: peppers,
+      // plantImage: peppers,
     },
     {
       id: 3,
@@ -88,7 +87,7 @@ export default function PlantList() {
       plantwatering: 'average',
       plantSunlight: ['full sun'],
       plantOtherName: [],
-      plantImage: peppers,
+      // plantImage: peppers,
     },
   ];
 
@@ -111,7 +110,7 @@ export default function PlantList() {
             </div>
             <div className="col-40">
               <img
-                src={peppers}
+                // src={peppers}
                 alt="placeholder peppers"
                 className="plant-img"
               />

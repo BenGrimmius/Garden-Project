@@ -3,11 +3,18 @@ import express from 'express';
 import pg from 'pg';
 import jwt from 'jsonwebtoken';
 import argon2 from 'argon2';
-import { ClientError, errorMiddleware } from './lib/index.js';
+import {
+  ClientError,
+  errorMiddleware,
+  defaultMiddleware,
+} from './lib/index.js';
 
 // eslint-disable-next-line no-unused-vars -- Remove when used
+const connectionString =
+  process.env.DATABASE_URL ||
+  `postgresql://${process.env.RDS_USERNAME}:${process.env.RDS_PASSWORD}@${process.env.RDS_HOSTNAME}:${process.env.RDS_PORT}/${process.env.RDS_DB_NAME}`;
 const db = new pg.Pool({
-  connectionString: process.env.DATABASE_URL,
+  connectionString,
   ssl: {
     rejectUnauthorized: false,
   },
@@ -87,6 +94,8 @@ app.post('/api/auth/sign-in', async (req, res, next) => {
  * React Router to manage the routing.
  */
 app.get('*', (req, res) => res.sendFile(`${reactStaticDir}/index.html`));
+
+app.use(defaultMiddleware(reactStaticDir));
 
 app.use(errorMiddleware);
 
