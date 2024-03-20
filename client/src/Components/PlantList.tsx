@@ -1,8 +1,12 @@
 // import peppers from '../images/peppers.jpeg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faCircleInfo } from '@fortawesome/free-solid-svg-icons';
+import { useState } from 'react';
+import peppers from '../images/peppers.jpeg';
 
 export default function PlantList() {
+  const [activeIndex, setActiveIndex] = useState(0);
+
   const addButton = (
     <FontAwesomeIcon icon={faPlus} style={{ fontSize: '30px' }} />
   );
@@ -10,6 +14,13 @@ export default function PlantList() {
   const iButton = (
     <FontAwesomeIcon icon={faCircleInfo} style={{ fontSize: '30px' }} />
   );
+
+  const handleClick = (i) => {
+    if (activeIndex === i) {
+      return setActiveIndex(null);
+    }
+    setActiveIndex(i);
+  };
 
   // async function fetchPlantData() {
   //     // Function that returns the ID of the plant determined by the name of the plant.
@@ -69,6 +80,8 @@ export default function PlantList() {
       plantwatering: 'average',
       plantSunlight: ['full sun', 'partial sun'],
       plantOtherName: ['that thing', 'spicy guy'],
+      plantDescription:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
       // plantImage: peppers,
     },
     {
@@ -78,6 +91,9 @@ export default function PlantList() {
       plantwatering: 'average',
       plantSunlight: ['full sun'],
       plantOtherName: ['that thing', 'where is it'],
+      plantDescription:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+
       // plantImage: peppers,
     },
     {
@@ -87,6 +103,9 @@ export default function PlantList() {
       plantwatering: 'average',
       plantSunlight: ['full sun'],
       plantOtherName: [],
+      plantDescription:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+
       // plantImage: peppers,
     },
   ];
@@ -95,7 +114,7 @@ export default function PlantList() {
     <div className="browse-list-container">
       {plantArray.map((plant) => (
         <div className="plant-wrapper" key={plant.id}>
-          <div className="row">
+          <div className="row" style={{ height: '150px' }}>
             <div className="col-40">
               <h2
                 style={{
@@ -110,7 +129,7 @@ export default function PlantList() {
             </div>
             <div className="col-40">
               <img
-                // src={peppers}
+                src={peppers}
                 alt="placeholder peppers"
                 className="plant-img"
               />
@@ -120,11 +139,17 @@ export default function PlantList() {
               style={{
                 display: 'flex',
                 flexDirection: 'column',
-                justifyContent: 'space-between',
+                justifyContent: 'space-evenly',
+                height: '100%',
               }}>
               <div style={{ margin: '10px' }}>{addButton}</div>
-              <div>{iButton}</div>
+              <div onClick={() => handleClick(plant.id)}>{iButton}</div>
             </div>
+          </div>
+          <div className={activeIndex === plant.id ? '' : 'hidden'}>
+            <p>
+              <b>Description:</b> {plant.plantDescription}
+            </p>
           </div>
         </div>
       ))}

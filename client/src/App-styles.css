@@ -32,6 +32,10 @@ li {
   z-index: -1;
 }
 
+.hidden {
+  display: none;
+}
+
 .logout-button {
   background: none;
   border: none;
