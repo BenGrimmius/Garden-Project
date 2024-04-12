@@ -11,6 +11,11 @@ li {
   margin: auto;
 }
 
+.accordion-data {
+  height: 20px;
+  margin: 5px;
+}
+
 .App {
   text-align: center;
   height: 100vh;

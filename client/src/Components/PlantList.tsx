@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faCircleInfo } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
 import peppers from '../images/peppers.jpeg';
+// import notAvailable from '../images/image-not-available.png';
 
 export default function PlantList() {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -23,54 +24,58 @@ export default function PlantList() {
   };
 
   // async function fetchPlantData() {
-  //     // Function that returns the ID of the plant determined by the name of the plant.
-  //       try {
-  //           const response = await fetch(`https://perenual.com/api/species-list?key=sk-zFJl6459c92238f02823&q=pepper`);
-  //           if (!response.ok) {
-  //             throw new Error(`HTTP error! Status: ${response.status}`);
-  //           }
-  //           const data = await response.json();
-  //           // console.log('Image Url: ', data.data[0].default_image.regular_url)
-  //           const plantId = data.data[0].id
-  //           const plantArray = [];
-  //           for (let i = 0; i < data.data.length; i++) {
-  //             const plantName = data.data[i].common_name;
-  //             const plantCycle = data.data[i].cycle;
-  // const plantId = data.data[i].id;
-  // const plantOtherName = null;
-  // if (data.data[i].other_name === []) {
-  //   plantOtherName = data.data[i].other_name
-  // } else {
-  //   plantOtherName = ''
-  // }
-  // const plantSunlight = data.data[i].sunlight;
-  //             const plantWatering = data.data[i].watering;
-  //             let plantImage = null;
-  //             if (data.data[i].default_image && data.data[i].default_image.regular_url) {
-  //                 plantImage = data.data[i].default_image.regular_url;
-  //               } else {
-  //                 plantImage = ''
-  //               }
-
-  //             const plant = {
-  //               plantId,
-  //               plantName,
-  //               plantImage,
-  //               plantCycle,
-  //               plantSunlight,
-  //               plantWatering
-  //             }
-  //             plantArray.push(plant)
-  //           }
-  //           console.log('Plant Array: ', plantArray)
-  //           return plantArray
-  //       } catch (error) {
-  //           console.error("Error fetching data:", error);
-  //           throw error
+  //   // Function that returns the ID of the plant determined by the name of the plant.
+  //   try {
+  //     const response = await fetch(
+  //       `https://perenual.com/api/species-list?key=sk-zFJl6459c92238f02823&q=pepper`
+  //     );
+  //     if (!response.ok) {
+  //       throw new Error(`HTTP error! Status: ${response.status}`);
+  //     }
+  //     const data = await response.json();
+  //     // console.log('DATA---', data);
+  //     // console.log('Image Url: ', data.data[0].default_image.regular_url);
+  //     const plantId = data.data[0].id;
+  //     const plantArray = [];
+  //     for (let i = 0; i < data.data.length; i++) {
+  //       const plantName = data.data[i].common_name;
+  //       const plantCycle = data.data[i].cycle;
+  //       const plantId = data.data[i].id;
+  //       let plantOtherName;
+  //       if (data.data[i].other_name !== null) {
+  //         plantOtherName = data.data[i].other_name;
+  //       } else {
+  //         plantOtherName = '';
   //       }
-  //   }
+  //       const plantSunlight = data.data[i].sunlight;
+  //       const plantWatering = data.data[i].watering;
+  //       let plantImage = null;
+  //       if (
+  //         data.data[i].default_image &&
+  //         data.data[i].default_image.regular_url
+  //       ) {
+  //         plantImage = data.data[i].default_image.regular_url;
+  //       }
 
-  //   fetchPlantData()
+  //       const plant = {
+  //         plantId,
+  //         plantName,
+  //         plantImage,
+  //         plantCycle,
+  //         plantSunlight,
+  //         plantWatering,
+  //       };
+  //       plantArray.push(plant);
+  //     }
+  //     console.log('Plant Array: ', plantArray);
+  //     return plantArray;
+  //   } catch (error) {
+  //     console.error('Error fetching data:', error);
+  //     throw error;
+  //   }
+  // }
+
+  // fetchPlantData();
 
   const plantArray = [
     {
@@ -80,8 +85,6 @@ export default function PlantList() {
       plantwatering: 'average',
       plantSunlight: ['full sun', 'partial sun'],
       plantOtherName: ['that thing', 'spicy guy'],
-      plantDescription:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
       // plantImage: peppers,
     },
     {
@@ -91,9 +94,6 @@ export default function PlantList() {
       plantwatering: 'average',
       plantSunlight: ['full sun'],
       plantOtherName: ['that thing', 'where is it'],
-      plantDescription:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-
       // plantImage: peppers,
     },
     {
@@ -103,15 +103,19 @@ export default function PlantList() {
       plantwatering: 'average',
       plantSunlight: ['full sun'],
       plantOtherName: [],
-      plantDescription:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-
       // plantImage: peppers,
     },
   ];
 
   return (
     <div className="browse-list-container">
+      <form>
+        <input
+          type="text"
+          name="name"
+          style={{ width: '70%', height: '50px', fontSize: '30px' }}
+        />
+      </form>
       {plantArray.map((plant) => (
         <div className="plant-wrapper" key={plant.id}>
           <div className="row" style={{ height: '150px' }}>
@@ -147,9 +151,41 @@ export default function PlantList() {
             </div>
           </div>
           <div className={activeIndex === plant.id ? '' : 'hidden'}>
-            <p>
-              <b>Description:</b> {plant.plantDescription}
-            </p>
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                margin: '0',
+              }}>
+              <div
+                className="col-30"
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'flex-start',
+                }}>
+                <p className="accordion-data">
+                  <b>Cycle:</b>
+                </p>
+                <p className="accordion-data">
+                  <b>Sunlight:</b>
+                </p>
+                <p className="accordion-data">
+                  <b>Watering:</b>
+                </p>
+              </div>
+              <div
+                className="col-30"
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'flex-start',
+                }}>
+                <p className="accordion-data">{plant.plantCycle}</p>
+                <p className="accordion-data">{plant.plantSunlight}</p>
+                <p className="accordion-data">{plant.plantwatering}</p>
+              </div>
+            </div>
           </div>
         </div>
       ))}
