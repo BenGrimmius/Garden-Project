@@ -11,6 +11,11 @@ li {
   margin: auto;
 }
 
+.accordion-data {
+  height: 20px;
+  margin: 5px;
+}
+
 .App {
   text-align: center;
   height: 100vh;
@@ -20,7 +25,7 @@ li {
 .browse-list-container {
   width: 400px;
   overflow: auto;
-  max-height: 750px;
+  max-height: 100%;
 }
 
 .form-wallpaper {
@@ -30,6 +35,10 @@ li {
   background-size: cover;
   position: fixed;
   z-index: -1;
+}
+
+.hidden {
+  display: none;
 }
 
 .logout-button {
@@ -81,6 +90,8 @@ li {
   box-shadow: 0 0 5px black;
   border-radius: 0.5rem;
   background-color: rgb(255, 254, 254, 0.7);
+  width: 95%;
+  max-width: 400px;
 }
 
 .register-modal {

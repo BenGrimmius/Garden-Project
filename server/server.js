@@ -52,6 +52,22 @@ app.post('/api/auth/sign-up', async (req, res, next) => {
   }
 });
 
+app.get('/api/auth/check-username', async (req, res, next) => {
+  try {
+    const { username } = req.query;
+    if (!username) {
+      return res.status(400).json({ error: 'Username is required' });
+    }
+    const sql = 'select 1 from "users" where "username" = $1';
+    const params = [username];
+    const result = await db.query(sql, params);
+    const isAvailable = result.rowCount === 0;
+    res.status(200).json({ isAvailable });
+  } catch (err) {
+    next(err);
+  }
+});
+
 app.post('/api/auth/sign-in', async (req, res, next) => {
   try {
     const { username, password } = req.body;
@@ -76,9 +92,70 @@ app.post('/api/auth/sign-in', async (req, res, next) => {
     }
     const payload = { userId, username };
     const token = jwt.sign(payload, process.env.TOKEN_SECRET);
-    res.json({ token, user: payload });
+    res.json({ token, userId, user: payload });
   } catch (err) {
     next(err);
+  }
+});
+
+app.post('/api/addplants', async (req, res, next) => {
+  try {
+    const { plantId, plantName, cycle, watering, photoUrl, sunlight, userId } =
+      req.body;
+    if (!plantId || !userId) {
+      throw new ClientError(401, 'plantId and userId are required fields.');
+    }
+    const sql = `
+    INSERT INTO "plants" ("plantId", "plantName", "cycle", "watering", "photoUrl", "sunlight", "userId")
+    VALUES ($1, $2, $3, $4, $5, $6, $7)
+    RETURNING *
+    `;
+    const params = [
+      plantId,
+      plantName,
+      cycle,
+      watering,
+      photoUrl,
+      sunlight,
+      userId,
+    ];
+    const result = await db.query(sql, params);
+    const [plant] = result.rows;
+
+    res.status(201).json(plant);
+  } catch (err) {
+    next(err);
+  }
+});
+
+app.delete('/api/user-plants/:userId/:plantId', async (req, res) => {
+  const userId = Number(req.params.userId);
+  const plantId = Number(req.params.plantId);
+
+  try {
+    const sql = `DELETE FROM "plants" WHERE "userId" = $1 AND "plantId" = $2 RETURNING *`;
+    const params = [userId, plantId];
+    const result = await db.query(sql, params);
+
+    res.status(200).json({ message: 'Plant deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting plant', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
+app.get('/api/user-plants/:userId', async (req, res, next) => {
+  try {
+    const { userId } = req.params;
+
+    const sql = `Select * From "plants" Where "userId" = $1`;
+
+    const params = [userId];
+    const result = await db.query(sql, params);
+    const userPlants = result.rows;
+    res.json(userPlants);
+  } catch (error) {
+    next(error);
   }
 });
 

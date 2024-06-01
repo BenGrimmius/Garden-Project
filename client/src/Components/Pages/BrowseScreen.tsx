@@ -6,7 +6,7 @@ export default function BrowseScreen({ onNavigate }) {
     <FontAwesomeIcon
       icon={faBackward}
       style={{
-        fontSize: '70px',
+        fontSize: '50px',
         margin: '1rem',
         position: 'absolute',
         left: '0',
@@ -16,14 +16,18 @@ export default function BrowseScreen({ onNavigate }) {
     />
   );
   return (
-    <div className="container fd-column jc-center ai-flex-start">
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        margin: '0 auto',
+        alignItems: 'center',
+      }}>
       <div className="row jc-space-between">
         {backButton}
         <div style={{ textAlign: 'center' }}>
           <h1 style={{ fontSize: '50px', margin: '5px 20px', width: '90%' }}>
-            Find your
-            <br />
-            plant
+            Find your plant
           </h1>
         </div>
       </div>

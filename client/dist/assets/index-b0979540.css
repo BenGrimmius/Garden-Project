@@ -1,0 +1,164 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+* {
+  font-family: ABeeZee, Arial, Helvetica, sans-serif;
+}
+ul {
+  list-style-type: none;
+}
+li {
+  padding: auto;
+  margin: auto;
+}
+.App {
+  text-align: center;
+  height: 100vh;
+  width: 100vw;
+}
+.browse-list-container {
+  width: 400px;
+  overflow: auto;
+  max-height: 750px;
+}
+.form-wallpaper {
+  height: 100vh;
+  width: 100vw;
+  background-image: url('/assets/log-in-background-943b5a7d.jpeg');
+  background-size: cover;
+  position: fixed;
+  z-index: -1;
+}
+.logout-button {
+  background: none;
+  border: none;
+  font-size: 20px;
+  text-decoration: none;
+  color: #d43c3c;
+  display: block;
+  margin-top: 2rem;
+  font-weight: 700;
+  text-shadow: 1px 1px 1px black;
+  cursor: pointer;
+  align-self: flex-start;
+}
+.main-wallpaper {
+  height: 100vh;
+  width: 100vw;
+  background-image: url('/assets/Garden-bg-921a5105.jpeg');
+  background-size: cover;
+  position: fixed;
+  z-index: -1;
+}
+.nav-to-register-button {
+  background: none;
+  border: none;
+  margin-top: 1rem;
+  font-size: 20px;
+  cursor: pointer;
+  text-decoration: underline;
+  color: #00f;
+  display: block;
+}
+.plant-img {
+  width: 130px;
+  height: 130px;
+  margin: 10px;
+  object-fit: cover;
+  border-radius: 0.5rem;
+  box-shadow: 0 0 5px #000;
+}
+.plant-wrapper {
+  border: 1px solid black;
+  margin: 10px;
+  box-shadow: 0 0 5px #000;
+  border-radius: 0.5rem;
+  background-color: #fffefeb3;
+}
+.register-modal {
+  width: 300px;
+  height: 450px;
+  background-color: #adadad;
+  border: 1px grey solid;
+  border-radius: 0.7rem;
+  opacity: 0.8;
+  padding: 5px;
+}
+.sign-in-modal {
+  width: 300px;
+  height: 400px;
+  background-color: #adadad;
+  border: 1px grey solid;
+  border-radius: 0.7rem;
+  opacity: 0.8;
+  padding: 5px;
+}
+.react-attributes-test {
+  color: #70bc70;
+}
+.ai-flex-start {
+  align-items: flex-start;
+}
+.as-flex-start {
+  align-self: flex-start;
+}
+.col-20 {
+  width: 20%;
+}
+.col-40 {
+  width: 40%;
+}
+.col-50 {
+  width: 50%;
+}
+.container {
+  display: flex;
+  margin: 0 auto;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  max-width: 700px;
+}
+.d-block {
+  display: block;
+}
+.d-flex {
+  display: flex;
+}
+.fd-column {
+  flex-direction: column;
+}
+.form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+.margin-bottom-1 {
+  margin-bottom: 1rem;
+}
+.row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.jc-space-between {
+  justify-content: space-between;
+}
+.jc-flex-start {
+  justify-content: flex-start;
+}
+.jc-flex-end {
+  justify-content: flex-end;
+}
+.width-200 {
+  width: 200px;
+}

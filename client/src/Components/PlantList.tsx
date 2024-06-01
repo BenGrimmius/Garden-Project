@@ -1,132 +1,164 @@
-// import peppers from '../images/peppers.jpeg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faCircleInfo } from '@fortawesome/free-solid-svg-icons';
+import PlantWrapper from './PlantWrapper';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { useState } from 'react';
+import placeHolder from '../images/placeHolder.png';
+
+interface Plant {
+  plantId: number;
+  plantName: string;
+  plantCycle: string;
+  plantWatering: string;
+  plantImage: string;
+  plantSunlight: string;
+}
 
 export default function PlantList() {
-  const addButton = (
-    <FontAwesomeIcon icon={faPlus} style={{ fontSize: '30px' }} />
-  );
+  const [activeIndex, setActiveIndex] = useState<number | null>(0);
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const [fetchedPlants, setFetchedPlants] = useState<Plant[]>([]);
+  const [errorMessage, setErrorMessage] = useState<string>('');
+  const [userPlants, setUserPlants] = useState<Plant[]>([]);
+  const userId = sessionStorage.getItem('userId');
 
-  const iButton = (
-    <FontAwesomeIcon icon={faCircleInfo} style={{ fontSize: '30px' }} />
-  );
+  const handleIndex = (i: number) => {
+    if (activeIndex === i) {
+      return setActiveIndex(null);
+    }
+    setActiveIndex(i);
+  };
 
-  // async function fetchPlantData() {
-  //     // Function that returns the ID of the plant determined by the name of the plant.
-  //       try {
-  //           const response = await fetch(`https://perenual.com/api/species-list?key=sk-zFJl6459c92238f02823&q=pepper`);
-  //           if (!response.ok) {
-  //             throw new Error(`HTTP error! Status: ${response.status}`);
-  //           }
-  //           const data = await response.json();
-  //           // console.log('Image Url: ', data.data[0].default_image.regular_url)
-  //           const plantId = data.data[0].id
-  //           const plantArray = [];
-  //           for (let i = 0; i < data.data.length; i++) {
-  //             const plantName = data.data[i].common_name;
-  //             const plantCycle = data.data[i].cycle;
-  // const plantId = data.data[i].id;
-  // const plantOtherName = null;
-  // if (data.data[i].other_name === []) {
-  //   plantOtherName = data.data[i].other_name
-  // } else {
-  //   plantOtherName = ''
-  // }
-  // const plantSunlight = data.data[i].sunlight;
-  //             const plantWatering = data.data[i].watering;
-  //             let plantImage = null;
-  //             if (data.data[i].default_image && data.data[i].default_image.regular_url) {
-  //                 plantImage = data.data[i].default_image.regular_url;
-  //               } else {
-  //                 plantImage = ''
-  //               }
+  const handleChange = (event) => {
+    setSearchQuery(event.target.value);
+    if (event.target.value) {
+      setErrorMessage('');
+    }
+  };
 
-  //             const plant = {
-  //               plantId,
-  //               plantName,
-  //               plantImage,
-  //               plantCycle,
-  //               plantSunlight,
-  //               plantWatering
-  //             }
-  //             plantArray.push(plant)
-  //           }
-  //           console.log('Plant Array: ', plantArray)
-  //           return plantArray
-  //       } catch (error) {
-  //           console.error("Error fetching data:", error);
-  //           throw error
-  //       }
-  //   }
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      const response = await fetch(
+        `https://perenual.com/api/species-list?key=sk-zFJl6459c92238f02823&q=${searchQuery}`
+      );
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      if (!searchQuery.trim()) {
+        setErrorMessage('Search query cannot be empty.');
+        return;
+      }
+      setErrorMessage('');
+      const data = await response.json();
+      const plantArray = data.data.map((plantData) => ({
+        plantId: plantData.id,
+        plantName: plantData.common_name,
+        plantCycle:
+          plantData.cycle !==
+          "Upgrade Plans To Premium/Supreme - https://perenual.com/subscription-api-pricing. I'm sorry"
+            ? plantData.cycle
+            : 'No info available',
+        plantSunlight:
+          plantData.sunlight !==
+          "Upgrade Plans To Premium/Supreme - https://perenual.com/subscription-api-pricing. I'm sorry"
+            ? plantData.sunlight
+            : 'No info available',
+        plantWatering:
+          plantData.watering !==
+          "Upgrade Plans To Premium/Supreme - https://perenual.com/subscription-api-pricing. I'm sorry"
+            ? plantData.watering
+            : 'No info available',
+        plantImage:
+          plantData.default_image &&
+          plantData.default_image.regular_url &&
+          plantData.default_image.regular_url !==
+            'https://perenual.com/storage/image/upgrade_access.jpg'
+            ? plantData.default_image.regular_url
+            : placeHolder,
+      }));
+      for (let i = 0; i < plantArray.length; i++) {
+        if (Array.isArray(plantArray[i].plantSunlight)) {
+          plantArray[i].plantSunlight = plantArray[i].plantSunlight.join(', ');
+        }
+      }
+      setFetchedPlants(plantArray);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
 
-  //   fetchPlantData()
-
-  const plantArray = [
-    {
-      id: 1,
-      plantName: 'Super spicy thing',
-      plantCycle: 'Perenual',
-      plantwatering: 'average',
-      plantSunlight: ['full sun', 'partial sun'],
-      plantOtherName: ['that thing', 'spicy guy'],
-      // plantImage: peppers,
-    },
-    {
-      id: 2,
-      plantName: 'lil guy',
-      plantCycle: 'Perenual',
-      plantwatering: 'average',
-      plantSunlight: ['full sun'],
-      plantOtherName: ['that thing', 'where is it'],
-      // plantImage: peppers,
-    },
-    {
-      id: 3,
-      plantName: 'Superlous thing',
-      plantCycle: 'Perenual',
-      plantwatering: 'average',
-      plantSunlight: ['full sun'],
-      plantOtherName: [],
-      // plantImage: peppers,
-    },
-  ];
+  const handleAddButton = async (plant) => {
+    try {
+      const isPlantAdded = userPlants.some(
+        (userPlant) => userPlant.plantId === plant.plantId
+      );
+      if (isPlantAdded) {
+        setErrorMessage('This plant is already added to your list.');
+        return;
+      }
+      const response = await fetch('/api/addplants', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          plantId: plant.plantId,
+          plantName: plant.plantName,
+          cycle: plant.plantCycle,
+          watering: plant.plantWatering,
+          photoUrl: plant.plantImage,
+          sunlight: plant.plantSunlight,
+          userId,
+        }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const addedPlant = await response.json();
+      setErrorMessage('');
+      setUserPlants((prevUserPlants) => [...prevUserPlants, addedPlant]);
+    } catch (error) {
+      console.error(`Error adding plant: `, error);
+      setErrorMessage('Failed to fetch plant data. Please try again.');
+    }
+  };
 
   return (
     <div className="browse-list-container">
-      {plantArray.map((plant) => (
-        <div className="plant-wrapper" key={plant.id}>
-          <div className="row">
-            <div className="col-40">
-              <h2
-                style={{
-                  margin: '5px',
-                  fontSize: '25px',
-                  overflowWrap: 'break-word',
-                  display: 'flex',
-                  justifyContent: 'center',
-                }}>
-                {plant.plantName}
-              </h2>
-            </div>
-            <div className="col-40">
-              <img
-                // src={peppers}
-                alt="placeholder peppers"
-                className="plant-img"
-              />
-            </div>
-            <div
-              className="col-20"
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-between',
-              }}>
-              <div style={{ margin: '10px' }}>{addButton}</div>
-              <div>{iButton}</div>
-            </div>
-          </div>
-        </div>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          name="name"
+          value={searchQuery}
+          onChange={handleChange}
+          style={{ width: '70%', height: '50px', fontSize: '30px' }}
+        />
+        <button
+          type="submit"
+          style={{ height: '40px', fontSize: '20px', margin: '10px' }}>
+          Search
+        </button>
+      </form>
+      {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
+      {fetchedPlants.map((plant) => (
+        <PlantWrapper
+          key={plant.plantId}
+          plantId={plant.plantId}
+          activeIndex={activeIndex}
+          watering={plant.plantWatering}
+          photoUrl={plant.plantImage}
+          name={plant.plantName}
+          cycle={plant.plantCycle}
+          sunlight={plant.plantSunlight}
+          handleIndex={handleIndex}
+          addDeleteIcon={
+            <FontAwesomeIcon
+              icon={faPlus}
+              style={{ fontSize: '30px', cursor: 'pointer' }}
+              onClick={() => handleAddButton(plant)}
+            />
+          }
+        />
       ))}
     </div>
   );
