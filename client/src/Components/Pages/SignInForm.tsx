@@ -13,8 +13,9 @@ export default function SignInForm({ onNavigate, onSignIn }) {
       if (!res.ok) {
         throw new Error(`fetch Error ${res.status}`);
       }
-      const { token } = await res.json();
+      const { token, userId } = await res.json();
       sessionStorage.setItem('token', token);
+      sessionStorage.setItem('userId', userId);
       onSignIn();
     } catch (err) {
       alert(`Error signing in: ${err}`);

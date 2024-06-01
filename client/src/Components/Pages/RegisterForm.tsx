@@ -1,22 +1,63 @@
+import { useState } from 'react';
+
 export default function RegisterForm({ onNavigate }) {
+  const [formData, setFormData] = useState({ username: '', password: '' });
+  const [isUsernameAvailable, setIsUsernameAvailable] = useState(true);
+
+  async function checkUsernameAvailability(username) {
+    try {
+      const res = await fetch(`/api/auth/check-username?username=${username}`);
+      if (!res.ok) {
+        throw new Error(`fetch Error ${res.status}`);
+      }
+      const contentType = res.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        throw new Error('Invalid content-type');
+      }
+      const data = await res.json();
+      return data.isAvailable;
+    } catch (err) {
+      console.error(`Error checking username: ${err}`);
+      return false;
+    }
+  }
+
+  async function handleUsernameChange(event) {
+    const newUsername = event.target.value;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      username: newUsername,
+    }));
+
+    if (newUsername.trim()) {
+      const available = await checkUsernameAvailability(newUsername);
+      setIsUsernameAvailable(available);
+    } else {
+      setIsUsernameAvailable(true);
+    }
+  }
+
   async function handleSubmit(event) {
     event.preventDefault();
+    if (!isUsernameAvailable) {
+      alert('Username is already taken. Please choose another one.');
+      return;
+    }
+
     try {
-      const formData = new FormData(event.target);
-      const userData = Object.fromEntries(formData.entries());
       const req = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(userData),
+        body: JSON.stringify(formData),
       };
       const res = await fetch('/api/auth/sign-up', req);
       if (!res.ok) {
         throw new Error(`fetch Error ${res.status}`);
       }
-    } catch (err) {
-      alert(`Error registering user: ${err}`);
-    } finally {
       onNavigate('sign-in');
+    } catch (err) {
+      console.error('Error registering user:', err);
+      alert('Error registering user. Please try again.');
     }
   }
 
@@ -33,6 +74,8 @@ export default function RegisterForm({ onNavigate }) {
                   required
                   name="username"
                   type="text"
+                  value={formData.username}
+                  onChange={handleUsernameChange}
                   style={{
                     display: 'block',
                     height: '30px',
@@ -50,6 +93,13 @@ export default function RegisterForm({ onNavigate }) {
                   required
                   name="password"
                   type="password"
+                  value={formData.password}
+                  onChange={(e) =>
+                    setFormData((prevFormData) => ({
+                      ...prevFormData,
+                      password: e.target.value,
+                    }))
+                  }
                   style={{
                     display: 'block',
                     height: '30px',

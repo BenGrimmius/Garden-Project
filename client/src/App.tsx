@@ -9,6 +9,8 @@ import BrowseScreen from './Components/Pages/BrowseScreen';
 
 function App() {
   const [page, setPage] = useState('sign-in');
+  const [userId, setUserId] = useState(null);
+
   function handleNavigate(page) {
     setPage(page);
     if (page === 'sign-out') {
@@ -16,7 +18,10 @@ function App() {
       setPage('sign-in');
     }
   }
-
+  function handleSignIn(userId) {
+    setUserId(userId);
+    handleNavigate('my-garden');
+  }
   return (
     <div className="App">
       {(page === 'sign-in' || page === 'register') && (
@@ -26,16 +31,14 @@ function App() {
         <div className="main-wallpaper" />
       )}
       {page === 'sign-in' && (
-        <SignInForm
-          onNavigate={handleNavigate}
-          onSignIn={() => handleNavigate('my-garden')}
-        />
+        <SignInForm onNavigate={handleNavigate} onSignIn={handleSignIn} />
       )}
       {page === 'register' && <RegisterForm onNavigate={handleNavigate} />}
       {page === 'my-garden' && (
         <MyGardenScreen
           onNavigate={handleNavigate}
           onSignout={handleNavigate}
+          userId={userId}
         />
       )}
       {page === 'browse-screen' && <BrowseScreen onNavigate={handleNavigate} />}

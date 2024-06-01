@@ -22,6 +22,7 @@ CREATE TABLE "public"."plants"(
   "watering" text NOT NULL,
   "photoUrl" varchar NOT NULL,
   "sunlight" text NOT NULL,
+  "userId" integer NOT NULL,
   "createdAt" timestamptz(6) NOT NULL DEFAULT now(),
   "updatedAt" timestamptz(6) NOT NULL DEFAULT now(),
   PRIMARY KEY ("plantId")
@@ -47,3 +48,5 @@ CREATE TABLE "public"."weather"(
   PRIMARY KEY ("weatherId"),
   FOREIGN KEY ("userId") REFERENCES "users"("userId")
 );
+
+ALTER TABLE "public"."plants" ADD FOREIGN KEY ("userId") REFERENCES "public"."users" ("userId");
