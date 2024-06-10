@@ -5,7 +5,6 @@ import SignInForm from './Components/Pages/SignInForm';
 import RegisterForm from './Components/Pages/RegisterForm';
 import MyGardenScreen from './Components/Pages/MyGardenScreen';
 import BrowseScreen from './Components/Pages/BrowseScreen';
-// import PlantList from './Components/PlantList';
 
 function App() {
   const [page, setPage] = useState('sign-in');

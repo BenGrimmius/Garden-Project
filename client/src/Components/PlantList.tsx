@@ -2,7 +2,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PlantWrapper from './PlantWrapper';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
-import placeHolder from '../images/placeHolder.png';
 
 interface Plant {
   plantId: number;
@@ -20,6 +19,8 @@ export default function PlantList() {
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [userPlants, setUserPlants] = useState<Plant[]>([]);
   const userId = sessionStorage.getItem('userId');
+
+  const placeHolder = '/placeHolder.png';
 
   const handleIndex = (i: number) => {
     if (activeIndex === i) {
