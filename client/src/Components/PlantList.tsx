@@ -58,11 +58,12 @@ export default function PlantList() {
           "Upgrade Plans To Premium/Supreme - https://perenual.com/subscription-api-pricing. I'm sorry"
             ? plantData.cycle
             : 'No info available',
-        plantSunlight:
-          plantData.sunlight !==
-          "Upgrade Plans To Premium/Supreme - https://perenual.com/subscription-api-pricing. I'm sorry"
-            ? plantData.sunlight
-            : 'No info available',
+        plantSunlight: Array.isArray(plantData.sunlight)
+          ? plantData.sunlight.join(', ')
+          : plantData.sunlight !==
+            "Upgrade Plans To Premium/Supreme - https://perenual.com/subscription-api-pricing. I'm sorry"
+          ? plantData.sunlight
+          : 'No info available',
         plantWatering:
           plantData.watering !==
           "Upgrade Plans To Premium/Supreme - https://perenual.com/subscription-api-pricing. I'm sorry"
