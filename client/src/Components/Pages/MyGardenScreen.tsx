@@ -1,21 +1,49 @@
+// MyGardenScreen.tsx
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCirclePlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { useState, useEffect } from 'react';
 import PlantWrapper from '../PlantWrapper';
 
-export default function MyGardenScreen({ onNavigate, onSignout }) {
-  const [userPlants, setUserPlants] = useState([]);
-  const [activeIndex, setActiveIndex] = useState(null);
-  const userId = Number(sessionStorage.getItem('userId'));
+interface Plant {
+  plantId: number;
+  plantName: string;
+  cycle: string;
+  watering: string;
+  photoUrl: string;
+  sunlight: string;
+}
+
+export interface MyGardenScreenProps {
+  onNavigate: (page: string) => void;
+  onSignout: (action: string) => void;
+}
+
+export default function MyGardenScreen({
+  onNavigate,
+  onSignout,
+}: MyGardenScreenProps) {
+  const [userId, setUserId] = useState<number | null>(null);
+
+  const [userPlants, setUserPlants] = useState<Plant[]>([]);
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   useEffect(() => {
+    const storedUserId = sessionStorage.getItem('userId');
+    if (storedUserId) {
+      setUserId(Number(storedUserId));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (userId === null) return;
     const fetchUserPlants = async () => {
       try {
         const response = await fetch(`/api/user-plants/${userId}`);
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
-        const userPlantsData = await response.json();
+        const userPlantsData: Plant[] = await response.json();
         setUserPlants(userPlantsData);
       } catch (error) {
         console.error('Error fetching user plants', error);
@@ -24,7 +52,7 @@ export default function MyGardenScreen({ onNavigate, onSignout }) {
     fetchUserPlants();
   }, [userId]);
 
-  const handleDelete = async (plantId) => {
+  const handleDelete = async (plantId: number) => {
     try {
       const response = await fetch(`/api/user-plants/${userId}/${plantId}`, {
         method: 'DELETE',
@@ -41,7 +69,7 @@ export default function MyGardenScreen({ onNavigate, onSignout }) {
     }
   };
 
-  const handleIndex = (plantId) => {
+  const handleIndex = (plantId: number) => {
     setActiveIndex((prevIndex) => (prevIndex === plantId ? null : plantId));
   };
 
