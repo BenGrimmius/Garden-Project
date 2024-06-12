@@ -17,6 +17,7 @@ interface Plant {
 export interface MyGardenScreenProps {
   onNavigate: (page: string) => void;
   onSignout: (action: string) => void;
+  userId: number | null;
 }
 
 export default function MyGardenScreen({
