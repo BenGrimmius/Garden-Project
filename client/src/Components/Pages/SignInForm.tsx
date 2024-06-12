@@ -18,7 +18,7 @@ export default function SignInForm({ onNavigate, onSignIn }) {
       sessionStorage.setItem('userId', userId);
       onSignIn();
     } catch (err) {
-      alert(`Error signing in: ${err}`);
+      alert(`Username or password is incorrect: ${err}`);
     }
   }
 
