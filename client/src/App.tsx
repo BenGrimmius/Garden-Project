@@ -8,19 +8,21 @@ import BrowseScreen from './Components/Pages/BrowseScreen';
 
 function App() {
   const [page, setPage] = useState('sign-in');
-  const [userId, setUserId] = useState(null);
+  const [userId, setUserId] = useState<number | null>(null);
 
-  function handleNavigate(page) {
+  function handleNavigate(page: string) {
     setPage(page);
     if (page === 'sign-out') {
       sessionStorage.removeItem('token');
       setPage('sign-in');
     }
   }
-  function handleSignIn(userId) {
+
+  function handleSignIn(userId: number) {
     setUserId(userId);
     handleNavigate('my-garden');
   }
+
   return (
     <div className="App">
       {(page === 'sign-in' || page === 'register') && (

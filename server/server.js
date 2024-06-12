@@ -155,6 +155,7 @@ app.get('/api/user-plants/:userId', async (req, res, next) => {
     const userPlants = result.rows;
     res.json(userPlants);
   } catch (error) {
+    console.error('Error fetching user plants:', error);
     next(error);
   }
 });

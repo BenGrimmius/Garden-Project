@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PlantWrapper from './PlantWrapper';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
-import { useState } from 'react';
+import { useState, ChangeEvent, FormEvent } from 'react';
 
 interface Plant {
   plantId: number;
@@ -29,29 +29,28 @@ export default function PlantList() {
     setActiveIndex(i);
   };
 
-  const handleChange = (event) => {
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value);
     if (event.target.value) {
       setErrorMessage('');
     }
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
+      if (!searchQuery.trim()) {
+        setErrorMessage('Search query cannot be empty.');
+        return;
+      }
       const response = await fetch(
         `https://perenual.com/api/species-list?key=sk-zFJl6459c92238f02823&q=${searchQuery}`
       );
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-      if (!searchQuery.trim()) {
-        setErrorMessage('Search query cannot be empty.');
-        return;
-      }
-      setErrorMessage('');
       const data = await response.json();
-      const plantArray = data.data.map((plantData) => ({
+      const plantArray: Plant[] = data.data.map((plantData: any) => ({
         plantId: plantData.id,
         plantName: plantData.common_name,
         plantCycle:
@@ -77,18 +76,34 @@ export default function PlantList() {
             ? plantData.default_image.regular_url
             : placeHolder,
       }));
+
       for (let i = 0; i < plantArray.length; i++) {
         if (Array.isArray(plantArray[i].plantSunlight)) {
           plantArray[i].plantSunlight = plantArray[i].plantSunlight.join(', ');
         }
       }
-      setFetchedPlants(plantArray);
+
+      const filteredPlants = plantArray.filter((plant) =>
+        plant.plantName.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+
+      const uniquePlants = Array.from(
+        filteredPlants.reduce((map, plant) => {
+          if (!map.has(plant.plantName.toLowerCase())) {
+            map.set(plant.plantName.toLowerCase(), plant);
+          }
+          return map;
+        }, new Map<string, Plant>())
+      ).map(([, plant]) => plant);
+
+      setFetchedPlants(uniquePlants);
     } catch (error) {
       console.error('Error fetching data:', error);
+      setErrorMessage('Failed to fetch plant data. Please try again.');
     }
   };
 
-  const handleAddButton = async (plant) => {
+  const handleAddButton = async (plant: Plant) => {
     try {
       const isPlantAdded = userPlants.some(
         (userPlant) => userPlant.plantId === plant.plantId
