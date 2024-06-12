@@ -78,11 +78,11 @@ export default function PlantList() {
             : placeHolder,
       }));
 
-      for (let i = 0; i < plantArray.length; i++) {
-        if (Array.isArray(plantArray[i].plantSunlight)) {
-          plantArray[i].plantSunlight = plantArray[i].plantSunlight.join(', ');
-        }
-      }
+      // for (let i = 0; i < plantArray.length; i++) {
+      //   if (Array.isArray(plantArray[i].plantSunlight)) {
+      //     plantArray[i].plantSunlight = plantArray[i].plantSunlight.join(', ');
+      //   }
+      // }
 
       const filteredPlants = plantArray.filter((plant) =>
         plant.plantName.toLowerCase().includes(searchQuery.toLowerCase())
