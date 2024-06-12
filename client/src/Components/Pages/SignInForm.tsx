@@ -22,6 +22,10 @@ export default function SignInForm({ onNavigate, onSignIn }) {
     }
   }
 
+  function handleGuestButton() {
+    onNavigate('my-garden');
+  }
+
   return (
     <>
       <div className="form-container">
@@ -77,6 +81,16 @@ export default function SignInForm({ onNavigate, onSignIn }) {
               Don't have an account?
               <br />
               Click here to register!
+            </button>
+          </div>
+          <div className="row" style={{ margin: '0' }}>
+            <p>Or</p>
+          </div>
+          <div className="row">
+            <button
+              className="continue-as-guest-button"
+              onClick={handleGuestButton}>
+              Continue as guest
             </button>
           </div>
         </div>
