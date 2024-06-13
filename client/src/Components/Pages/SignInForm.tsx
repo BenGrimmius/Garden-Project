@@ -33,13 +33,11 @@ export default function SignInForm({ onNavigate, onSignIn }) {
     };
 
     try {
-      console.log('Req:', req);
       const res = await fetch('/api/auth/sign-in', req);
       if (!res.ok) {
         throw new Error(`fetch Error ${res.status}`);
       }
       const { token, userId } = await res.json();
-      console.log('Token and userId:', { token, userId });
       sessionStorage.setItem('token', token);
       sessionStorage.setItem('userId', userId);
       onSignIn();
