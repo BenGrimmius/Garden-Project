@@ -70,6 +70,10 @@ app.get('/api/auth/check-username', async (req, res, next) => {
 
 app.post('/api/auth/sign-in', async (req, res, next) => {
   try {
+    if (req.body.username === 'Guest') {
+      req.body.username = 'Guest';
+      req.body.password = 'GuestPassword';
+    }
     const { username, password } = req.body;
     if (!username || !password) {
       throw new ClientError(401, 'invalid login');
@@ -94,6 +98,7 @@ app.post('/api/auth/sign-in', async (req, res, next) => {
     const token = jwt.sign(payload, process.env.TOKEN_SECRET);
     res.json({ token, userId, user: payload });
   } catch (err) {
+    console.error('Error during sign-in:', err);
     next(err);
   }
 });

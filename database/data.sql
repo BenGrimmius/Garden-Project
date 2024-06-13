@@ -9,3 +9,8 @@
 --      ('Learn to code', false),
 --      ('Build projects', false),
 --      ('Get a job', false);
+
+insert into "users"
+  ("username", "hashedPassword")
+  values
+    ('Guest', 'GuestPassword')
