@@ -31,6 +31,28 @@ app.use(express.static(reactStaticDir));
 app.use(express.static(uploadsStaticDir));
 app.use(express.json());
 
+async function updateGuestUserPassword() {
+  const username = 'Guest';
+  const plainPassword = 'GuestPassword';
+  const hashedPassword = await argon2.hash(plainPassword);
+
+  const sql = `
+    INSERT INTO "users" ("username", "hashedPassword")
+    VALUES ($1, $2)
+    ON CONFLICT ("username")
+    DO UPDATE SET "hashedPassword" = EXCLUDED."hashedPassword";
+  `;
+
+  const params = [username, hashedPassword];
+
+  try {
+    await db.query(sql, params);
+    console.log('Guest user password updated successfully');
+  } catch (err) {
+    console.error('Error updating guest user password:', err);
+  }
+}
+
 app.post('/api/auth/sign-up', async (req, res, next) => {
   try {
     const { username, password } = req.body;
@@ -182,6 +204,8 @@ app.use(defaultMiddleware(reactStaticDir));
 
 app.use(errorMiddleware);
 
-app.listen(process.env.PORT, () => {
-  process.stdout.write(`\n\napp listening on port ${process.env.PORT}\n\n`);
+updateGuestUserPassword().then(() => {
+  app.listen(process.env.PORT, () => {
+    process.stdout.write(`\n\napp listening on port ${process.env.PORT}\n\n`);
+  });
 });
