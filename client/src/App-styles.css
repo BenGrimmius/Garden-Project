@@ -23,7 +23,7 @@ li {
 }
 
 .browse-list-container {
-  width: 400px;
+  width: 500px;
   overflow: auto;
   max-height: 100%;
 }
@@ -37,6 +37,11 @@ li {
   text-decoration: underline;
   color: blue;
   display: block;
+}
+
+.fade-out {
+  opacity: 0;
+  transition: opacity 2s ease-out;
 }
 
 .form-wallpaper {
@@ -55,7 +60,7 @@ li {
 .logout-button {
   background: none;
   border: none;
-  font-size: 20px;
+  font-size: 30px;
   text-decoration: none;
   color: rgb(212, 60, 60);
   display: block;
@@ -117,7 +122,6 @@ li {
 
 .sign-in-modal {
   width: 300px;
-  height: 450px;
   background-color: rgb(173, 173, 173);
   border: 1px grey solid;
   border-radius: 0.7rem;
