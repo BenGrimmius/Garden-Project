@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PlantWrapper from './PlantWrapper';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 import { useState, ChangeEvent, FormEvent } from 'react';
 
 interface Plant {
@@ -18,6 +18,9 @@ export default function PlantList() {
   const [fetchedPlants, setFetchedPlants] = useState<Plant[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [userPlants, setUserPlants] = useState<Plant[]>([]);
+  const [noPlantsFound, setNoPlantsFound] = useState<boolean>(false);
+  const [plantAdded, setPlantAdded] = useState<number | null>(null);
+  const [fadeOut, setFadeOut] = useState<boolean>(false);
   const userId = sessionStorage.getItem('userId');
 
   const placeHolder = '/placeHolder.png';
@@ -78,12 +81,6 @@ export default function PlantList() {
             : placeHolder,
       }));
 
-      // for (let i = 0; i < plantArray.length; i++) {
-      //   if (Array.isArray(plantArray[i].plantSunlight)) {
-      //     plantArray[i].plantSunlight = plantArray[i].plantSunlight.join(', ');
-      //   }
-      // }
-
       const filteredPlants = plantArray.filter((plant) =>
         plant.plantName.toLowerCase().includes(searchQuery.toLowerCase())
       );
@@ -98,6 +95,7 @@ export default function PlantList() {
       ).map(([, plant]) => plant);
 
       setFetchedPlants(uniquePlants);
+      setNoPlantsFound(uniquePlants.length === 0);
     } catch (error) {
       console.error('Error fetching data:', error);
       setErrorMessage('Failed to fetch plant data. Please try again.');
@@ -133,7 +131,16 @@ export default function PlantList() {
       }
       const addedPlant = await response.json();
       setErrorMessage('');
+      setPlantAdded(plant.plantId);
       setUserPlants((prevUserPlants) => [...prevUserPlants, addedPlant]);
+
+      setTimeout(() => {
+        setFadeOut(true);
+        setTimeout(() => {
+          setPlantAdded(null);
+          setFadeOut(false);
+        }, 1000);
+      }, 1000);
     } catch (error) {
       console.error(`Error adding plant: `, error);
       setErrorMessage('Failed to fetch plant data. Please try again.');
@@ -142,40 +149,59 @@ export default function PlantList() {
 
   return (
     <div className="browse-list-container">
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="name"
-          value={searchQuery}
-          onChange={handleChange}
-          style={{ width: '70%', height: '50px', fontSize: '30px' }}
-        />
-        <button
-          type="submit"
-          style={{ height: '40px', fontSize: '20px', margin: '10px' }}>
-          Search
-        </button>
-      </form>
-      {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
+      <div>
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            name="name"
+            value={searchQuery}
+            onChange={handleChange}
+            style={{ width: '70%', height: '50px', fontSize: '30px' }}
+          />
+          <button
+            type="submit"
+            style={{ height: '40px', fontSize: '20px', margin: '10px' }}>
+            Search
+          </button>
+        </form>
+        <div style={{ height: '80px' }}>
+          {errorMessage && <h2>{errorMessage}</h2>}
+          {noPlantsFound && <h2>No Plants Found.</h2>}
+        </div>
+      </div>
       {fetchedPlants.map((plant) => (
-        <PlantWrapper
+        <div
           key={plant.plantId}
-          plantId={plant.plantId}
-          activeIndex={activeIndex}
-          watering={plant.plantWatering}
-          photoUrl={plant.plantImage}
-          name={plant.plantName}
-          cycle={plant.plantCycle}
-          sunlight={plant.plantSunlight}
-          handleIndex={handleIndex}
-          addDeleteIcon={
+          style={{ display: 'flex', alignItems: 'center' }}>
+          <PlantWrapper
+            plantId={plant.plantId}
+            activeIndex={activeIndex}
+            watering={plant.plantWatering}
+            photoUrl={plant.plantImage}
+            name={plant.plantName}
+            cycle={plant.plantCycle}
+            sunlight={plant.plantSunlight}
+            handleIndex={handleIndex}
+            addDeleteIcon={
+              <FontAwesomeIcon
+                icon={faPlus}
+                style={{ fontSize: '30px', cursor: 'pointer' }}
+                onClick={() => handleAddButton(plant)}
+              />
+            }
+          />
+          {plantAdded === plant.plantId && (
             <FontAwesomeIcon
-              icon={faPlus}
-              style={{ fontSize: '30px', cursor: 'pointer' }}
-              onClick={() => handleAddButton(plant)}
+              icon={faCheckCircle}
+              className={fadeOut ? 'fade-out' : ''}
+              style={{
+                fontSize: '30px',
+                color: 'lawngreen',
+                marginLeft: '10px',
+              }}
             />
-          }
-        />
+          )}
+        </div>
       ))}
     </div>
   );
