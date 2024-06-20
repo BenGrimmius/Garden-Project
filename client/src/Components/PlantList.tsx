@@ -197,7 +197,7 @@ export default function PlantList() {
               style={{
                 fontSize: '30px',
                 color: 'lawngreen',
-                marginLeft: '10px',
+                marginLeft: '5px',
               }}
             />
           )}

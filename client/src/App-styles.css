@@ -23,7 +23,7 @@ li {
 }
 
 .browse-list-container {
-  width: 400px;
+  width: 390px;
   overflow: auto;
   max-height: 100%;
 }
