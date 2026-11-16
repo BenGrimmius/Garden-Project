@@ -10,6 +10,24 @@ interface Plant {
   plantWatering: string;
   plantImage: string;
   plantSunlight: string;
+  detailsLoaded?: boolean;
+}
+
+const API_KEY = 'sk-zFJl6459c92238f02823';
+const NO_INFO = 'No info available';
+
+// Perenual returns null, an array, or an "Upgrade Plans..." message for
+// fields the free plan can't see. Normalize all of these to display text.
+function formatField(value: unknown): string {
+  const text = Array.isArray(value) ? value.join(', ') : value;
+  if (
+    typeof text !== 'string' ||
+    !text.trim() ||
+    text.startsWith('Upgrade Plans')
+  ) {
+    return NO_INFO;
+  }
+  return text;
 }
 
 export default function PlantList() {
@@ -25,11 +43,40 @@ export default function PlantList() {
 
   const placeHolder = '/placeHolder.png';
 
+  // The species-list endpoint no longer includes cycle/watering/sunlight,
+  // so fetch them from the v2 details endpoint the first time they're needed.
+  const loadDetails = async (plant: Plant): Promise<Plant> => {
+    if (plant.detailsLoaded) return plant;
+    let updated: Plant = { ...plant, detailsLoaded: true };
+    try {
+      const response = await fetch(
+        `https://perenual.com/api/v2/species/details/${plant.plantId}?key=${API_KEY}`
+      );
+      if (response.ok) {
+        const details = await response.json();
+        updated = {
+          ...updated,
+          plantCycle: formatField(details.cycle),
+          plantWatering: formatField(details.watering),
+          plantSunlight: formatField(details.sunlight),
+        };
+      }
+    } catch (error) {
+      console.error('Error fetching plant details:', error);
+    }
+    setFetchedPlants((prev) =>
+      prev.map((p) => (p.plantId === plant.plantId ? updated : p))
+    );
+    return updated;
+  };
+
   const handleIndex = (i: number) => {
     if (activeIndex === i) {
       return setActiveIndex(null);
     }
     setActiveIndex(i);
+    const plant = fetchedPlants.find((p) => p.plantId === i);
+    if (plant) loadDetails(plant);
   };
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -47,7 +94,7 @@ export default function PlantList() {
         return;
       }
       const response = await fetch(
-        `https://perenual.com/api/species-list?key=sk-zFJl6459c92238f02823&q=${searchQuery}`
+        `https://perenual.com/api/species-list?key=${API_KEY}&q=${searchQuery}`
       );
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -56,22 +103,9 @@ export default function PlantList() {
       const plantArray: Plant[] = data.data.map((plantData: any) => ({
         plantId: plantData.id,
         plantName: plantData.common_name,
-        plantCycle:
-          plantData.cycle !==
-          "Upgrade Plans To Premium/Supreme - https://perenual.com/subscription-api-pricing. I'm sorry"
-            ? plantData.cycle
-            : 'No info available',
-        plantSunlight: Array.isArray(plantData.sunlight)
-          ? plantData.sunlight.join(', ')
-          : plantData.sunlight !==
-            "Upgrade Plans To Premium/Supreme - https://perenual.com/subscription-api-pricing. I'm sorry"
-          ? plantData.sunlight
-          : 'No info available',
-        plantWatering:
-          plantData.watering !==
-          "Upgrade Plans To Premium/Supreme - https://perenual.com/subscription-api-pricing. I'm sorry"
-            ? plantData.watering
-            : 'No info available',
+        plantCycle: formatField(plantData.cycle),
+        plantSunlight: formatField(plantData.sunlight),
+        plantWatering: formatField(plantData.watering),
         plantImage:
           plantData.default_image &&
           plantData.default_image.regular_url &&
@@ -102,8 +136,9 @@ export default function PlantList() {
     }
   };
 
-  const handleAddButton = async (plant: Plant) => {
+  const handleAddButton = async (searchResult: Plant) => {
     try {
+      const plant = await loadDetails(searchResult);
       const isPlantAdded = userPlants.some(
         (userPlant) => userPlant.plantId === plant.plantId
       );
