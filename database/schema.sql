@@ -16,7 +16,7 @@ CREATE TABLE "public"."users"(
 );
 
 CREATE TABLE "public"."plants"(
-  "plantId" serial,
+  "plantId" integer NOT NULL, -- Perenual species id
   "plantName" text NOT NULL,
   "cycle" text NOT NULL,
   "watering" text NOT NULL,
@@ -25,18 +25,8 @@ CREATE TABLE "public"."plants"(
   "userId" integer NOT NULL,
   "createdAt" timestamptz(6) NOT NULL DEFAULT now(),
   "updatedAt" timestamptz(6) NOT NULL DEFAULT now(),
-  PRIMARY KEY ("plantId")
-);
-
-CREATE TABLE "public"."garden"(
-  "gardenId" serial,
-  "userId" int NOT NULL,
-  "plantId" int NOT NULL,
-  "createdAt" timestamptz(6) NOT NULL DEFAULT now(),
-  "updatedAt" timestamptz(6) NOT NULL DEFAULT now(),
-  PRIMARY KEY ("gardenId"),
-  FOREIGN KEY ("userId") REFERENCES "users"("userId"),
-  FOREIGN KEY ("plantId") REFERENCES "plants"("plantId")
+  -- Each user can add a given plant once; different users can share plants.
+  PRIMARY KEY ("userId", "plantId")
 );
 
 CREATE TABLE "public"."weather"(

@@ -135,6 +135,7 @@ app.post('/api/addplants', async (req, res, next) => {
     const sql = `
     INSERT INTO "plants" ("plantId", "plantName", "cycle", "watering", "photoUrl", "sunlight", "userId")
     VALUES ($1, $2, $3, $4, $5, $6, $7)
+    ON CONFLICT ("userId", "plantId") DO NOTHING
     RETURNING *
     `;
     const params = [
@@ -148,6 +149,9 @@ app.post('/api/addplants', async (req, res, next) => {
     ];
     const result = await db.query(sql, params);
     const [plant] = result.rows;
+    if (!plant) {
+      throw new ClientError(409, 'This plant is already in your garden.');
+    }
 
     res.status(201).json(plant);
   } catch (err) {

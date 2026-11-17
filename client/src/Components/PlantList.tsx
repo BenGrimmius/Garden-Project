@@ -161,6 +161,10 @@ export default function PlantList() {
           userId,
         }),
       });
+      if (response.status === 409) {
+        setErrorMessage('This plant is already in your garden.');
+        return;
+      }
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
@@ -178,7 +182,7 @@ export default function PlantList() {
       }, 1000);
     } catch (error) {
       console.error(`Error adding plant: `, error);
-      setErrorMessage('Failed to fetch plant data. Please try again.');
+      setErrorMessage('Failed to add plant. Please try again.');
     }
   };
 
